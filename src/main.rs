@@ -54,6 +54,7 @@ impl<T: ?Sized, Res> Map<Res> for T {
     // use default definitions...
 }
 
+#[derive(Debug)]
 pub struct Person {
     pub first_name: String,
     pub last_name: String,
@@ -75,14 +76,15 @@ fn main() {
 
     let person = Person {
         first_name: "Coucou Mazlum".into(),
-        last_name: "".into(),
+        last_name: "Toto".into(),
         civility: "Madrid".into(),
     };
 
     let result_str = person
-    .map(|p| Expenses::transform_str1(&p.first_name))
-    .map(|s| Expenses::transform_str2(&s));
+    .map_ref(|p| Expenses::transform_str1(&p.first_name))
+    .map_ref(|s| Expenses::transform_str2(&s));
 
     dbg!(result_str);
+    dbg!(person);
 
 }
