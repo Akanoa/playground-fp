@@ -72,31 +72,37 @@ fn main() {
     .map(Expenses::get_transport_expenses)
     .map(Expenses::get_exceptional_expenses);
 
+    dbg!(profit);
+
     let lazy_profit = turnover.map(|data| {
         move || {
             data.map(Expenses::get_remuneration)
-                .map(Expenses::get_deductible_taxes)
-                .map(Expenses::get_operating_expenses)
-                .map(Expenses::get_transport_expenses)
-                .map(Expenses::get_exceptional_expenses)
+            .map(Expenses::get_deductible_taxes)
+            .map(Expenses::get_operating_expenses)
+            .map(Expenses::get_transport_expenses)
+            .map(Expenses::get_exceptional_expenses)
         }
     });
 
-    dbg!(lazy_profit());
-
-    dbg!(profit);
+    dbg!(execute_lazy(lazy_profit));
 
     let person = Person {
         first_name: "Coucou Mazlum".into(),
         last_name: "Toto".into(),
         civility: "Madrid".into(),
     };
-
+    
     let result_str = person
     .map_ref(|p| Expenses::transform_str1(&p.first_name))
     .map_ref(|s| Expenses::transform_str2(&s));
 
-    dbg!(result_str);
-    dbg!(person);
+dbg!(result_str);
+dbg!(person);
 
+
+
+}
+
+fn execute_lazy<T, F: Fn() -> T>(f: F) -> T {
+    f()
 }
