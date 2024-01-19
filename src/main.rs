@@ -72,6 +72,18 @@ fn main() {
     .map(Expenses::get_transport_expenses)
     .map(Expenses::get_exceptional_expenses);
 
+    let lazy_profit = turnover.map(|data| {
+        move || {
+            data.map(Expenses::get_remuneration)
+                .map(Expenses::get_deductible_taxes)
+                .map(Expenses::get_operating_expenses)
+                .map(Expenses::get_transport_expenses)
+                .map(Expenses::get_exceptional_expenses)
+        }
+    });
+
+    dbg!(lazy_profit());
+
     dbg!(profit);
 
     let person = Person {
